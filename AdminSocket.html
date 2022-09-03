@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>AdminSocket</title>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+<link rel="stylesheet" href="AdminSocket.css" media="screen">
+    <script class="u-script" type="text/javascript" src="jquery.js" "="" defer=""></script>
+    <script class="u-script" type="text/javascript" src="nicepage.js" "="" defer=""></script>
+    <meta name="generator" content="Nicepage 4.16.0, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="AdminSocket">
+    <meta property="og:type" content="website">
+  </head>
+  <body class="u-body u-xl-mode" data-lang="en">
+    <section class="u-clearfix u-section-1" id="sec-e2e0">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h3 class="u-text u-text-default u-text-1">Admin Control Panel</h3>
+        <div class="u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top-lg u-valign-top-md u-valign-top-sm u-valign-top-xl u-container-layout-1">
+                <a onclick="start()" class="u-btn u-button-style u-custom-item u-btn-1">Start</a>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top-lg u-valign-top-md u-valign-top-sm u-valign-top-xl u-container-layout-2">
+                <a onclick="end()"  class="u-btn u-button-style u-custom-item u-btn-2">End</a>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top-lg u-valign-top-md u-valign-top-sm u-valign-top-xl u-container-layout-3">
+                <a onclick="reset()"  class="u-btn u-button-style u-custom-item u-btn-3">Reset</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h5 id="demo" class="u-align-center u-text u-text-2">0</h5>
+        <p class="u-text u-text-3">User Connected :&nbsp;</p>
+      </div>
+    </section>
+  
+</body></html>
+<script>
+  const ws = new WebSocket("wss://quixotic-grey-ceiling.glitch.me/");
+  ws.addEventListener("open", () => {
+    console.log("We are connected");
+    ws.send("Connect:Admin");
+  });
+
+  ws.addEventListener('message', function (event) {
+    console.log(event.data);
+    if (event.data.includes("ConnectedUsers:")) {
+      document.getElementById("demo").innerHTML = event.data.split(":")[1];
+    }
+  });
+
+  function start() {
+    ws.send("ChangeState:1");
+  }
+
+  function end() {
+    ws.send("ChangeState:2");
+  }
+
+  function reset() {
+    ws.send("ChangeState:0");
+  }
+</script>
